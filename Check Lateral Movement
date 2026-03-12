@@ -1,0 +1,10 @@
+Look for:
+
+RDP
+SSH
+SMB
+WinRM
+
+Example query:
+
+index=network src_ip=compromised_host
