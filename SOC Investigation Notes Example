@@ -1,0 +1,27 @@
+ Example note you could write during an investigation.
+
+Alert triggered for multiple failed SSH authentication attempts.
+
+Source IP: 187.191.2.213
+Target Host: MTS-Honeypot
+Event Type: Failed SSH Login
+Time Window: 08:40 – 08:45 UTC
+
+Findings:
+
+• ≥24 failed SSH login attempts observed
+• Repeated targeting of root account
+• Multiple invalid usernames attempted
+• No successful authentication events
+• No suspicious processes observed
+• No persistence mechanisms detected
+• No lateral movement indicators
+
+Conclusion:
+Activity consistent with automated SSH brute force scanning.
+
+Impact:
+No compromise observed.
+Pro SOC Analyst Tip (Interview Gold)
+
+"I validate the alert, build a timeline of events, determine whether authentication succeeded, and then investigate persistence and lateral movement indicators."
