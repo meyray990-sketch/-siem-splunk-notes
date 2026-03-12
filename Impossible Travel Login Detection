@@ -1,0 +1,16 @@
+Detection Logic
+
+User logs in from two distant locations too quickly.
+
+Splunk Query
+index=auth sourcetype=login
+| stats earliest(_time) as first latest(_time) as last values(src_ip) as ips by user
+| where mvcount(ips) > 1
+
+Investigate:
+
+VPN use
+
+Compromised account
+
+Credential theft
