@@ -1,0 +1,17 @@
+Detection Logic
+
+Detect a successful login following multiple failed attempts.
+
+Splunk Query
+index=linux sourcetype=secure
+("Failed password" OR "Accepted password")
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| transaction src_ip maxspan=5m
+| search "Accepted password"
+Why This Matters
+
+Attackers often succeed after brute forcing credentials.
+
+SOC analysts always ask:
+
+Did a success follow the failures?
