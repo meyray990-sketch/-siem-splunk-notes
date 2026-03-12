@@ -1,0 +1,28 @@
+Detection Logic
+
+Detect multiple failed authentication attempts from the same IP in a short time window.
+
+Splunk Query
+index=linux sourcetype=secure OR sourcetype=syslog "Failed password"
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| stats count by src_ip user host
+| where count > 20
+| sort -count
+What This Detects
+
+SSH brute force
+
+Password spraying
+
+Credential stuffing attempts
+
+Investigation Pivot
+index=linux sourcetype=secure src_ip=187.191.2.213
+
+Look for:
+
+Accepted password
+Accepted publickey
+session opened
+
+If you see Accepted password → potential compromise
