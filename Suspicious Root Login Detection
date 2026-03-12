@@ -1,0 +1,15 @@
+Detection Logic
+
+Detect root account logins via SSH.
+
+Splunk Query
+index=linux sourcetype=secure "Accepted password for root"
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| stats count by src_ip host
+Why It's Suspicious
+
+Best practice:
+
+PermitRootLogin no
+
+So if you see root login events, investigate immediately.
