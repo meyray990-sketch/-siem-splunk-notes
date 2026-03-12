@@ -1,0 +1,49 @@
+Detection Logic
+
+Detect suspicious shell spawned by SSH session.
+
+Splunk Query
+index=linux sourcetype=process
+(parent_process=sshd OR parent_process=ssh)
+| search process IN ("bash","sh","nc","python","perl")
+| stats count by host user process parent_process
+
+What This Does
+
+Looks for processes spawned from sshd
+
+Filters for commonly abused binaries
+
+Shows which user executed them
+
+Why
+
+Attackers often execute:
+
+bash
+sh
+python reverse shells
+nc backdoors
+
+Typical attacker behavior:
+
+SSH Login
+     ↓
+Spawn shell
+     ↓
+Reconnaissance
+     ↓
+Download tools
+     ↓
+Persistence / lateral movement
+
+Common suspicious processes launched after SSH:
+
+bash
+sh
+python
+perl
+nc
+curl
+wget
+socat
