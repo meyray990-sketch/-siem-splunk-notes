@@ -1,0 +1,105 @@
+SIEM Lab: Splunk on Kali Linux
+📌 Overview
+
+This project demonstrates the installation, configuration, and troubleshooting of Splunk Enterprise on a Kali Linux virtual machine.
+
+The goal of this lab is to simulate real-world SOC analyst tasks, including:
+
+SIEM deployment
+Service troubleshooting
+Log monitoring preparation
+🎯 Objectives
+Install Splunk Enterprise on Kali Linux
+Resolve installation and startup issues
+Configure Splunk to run persistently at boot
+Validate web interface and service availability
+Prepare environment for log ingestion and threat detection
+🧰 Technologies Used
+Kali Linux (VirtualBox)
+Splunk Enterprise
+Linux CLI (bash)
+Systemd (service management)
+⚙️ Installation Steps
+1. Download Splunk
+wget -O splunk.deb "https://download.splunk.com/products/splunk/releases/10.2.1/linux/splunk-10.2.1-c892b66d163d-linux-amd64.deb"
+2. Install Package
+sudo dpkg -i splunk.deb
+sudo apt --fix-broken install -y
+3. Start Splunk
+/opt/splunk/bin/splunk start --accept-license
+🔧 Troubleshooting (Key Learning)
+
+During setup, several real-world issues occurred:
+
+❌ Issue 1: Command Errors
+Incorrect syntax caused “command not found”
+Fixed by correcting Linux command usage
+❌ Issue 2: Splunk Not Starting
+splunkd is not running
+Root cause: permission and execution conflicts
+
+✔️ Fix:
+
+sudo chown -R ray:ray /opt/splunk
+/opt/splunk/bin/splunk start
+❌ Issue 3: Web Interface Not Accessible
+localhost:8000 refused to connect
+
+✔️ Fix:
+
+Verified Splunk status
+Used correct address:
+http://127.0.0.1:8000
+❌ Issue 4: Boot Service Failure
+Splunk failed to start at boot due to root execution
+
+✔️ Fix:
+
+sudo /opt/splunk/bin/splunk enable boot-start -user ray
+✅ Verification
+
+Check Splunk status:
+
+/opt/splunk/bin/splunk status
+
+Expected output:
+
+splunkd is running
+
+Access Web Interface:
+
+http://127.0.0.1:8000
+🔁 Persistence Test
+
+Reboot system:
+
+sudo reboot
+
+Verify:
+
+/opt/splunk/bin/splunk status
+
+✔️ Splunk starts automatically at boot
+
+📊 Next Steps (Planned)
+Ingest Linux logs (/var/log/auth.log)
+Detect failed SSH login attempts
+Build dashboards and alerts
+Simulate brute-force attack scenarios
+🧠 Key Takeaways
+SIEM tools require hands-on troubleshooting
+Permission and service issues are common in real environments
+Understanding Linux services is critical for SOC roles
+Troubleshooting > installation in cybersecurity learning
+📸 Screenshots
+
+(Add your screenshots here — installation, errors, success screen, Splunk UI)
+
+🔗 Project Link
+
+👉 https://github.com/meyray990-sketch/-siem-splunk-notes
+
+👤 Author
+
+Raymond Yubei
+Aspiring SOC Analyst | CompTIA CySA+ | Security+
