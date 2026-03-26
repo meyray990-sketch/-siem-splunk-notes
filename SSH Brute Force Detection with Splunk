@@ -1,0 +1,113 @@
+SIEM Lab: SSH Brute Force Detection with Splunk
+📌 Overview
+
+This project demonstrates the deployment and use of Splunk Enterprise on Kali Linux to simulate and detect SSH brute-force attacks.
+
+The lab replicates real-world SOC analyst workflows, including log ingestion, detection engineering, alert creation, and dashboard visualization.
+
+🎯 Objectives
+Deploy Splunk Enterprise on Kali Linux
+Ingest and monitor Linux authentication logs (/var/log/auth.log)
+Simulate SSH brute-force attacks
+Develop detection queries using SPL
+Build a real-time monitoring dashboard
+Map detections to MITRE ATT&CK framework
+🧰 Technologies Used
+Kali Linux (VirtualBox)
+Splunk Enterprise (SIEM)
+Linux CLI (bash)
+systemd / rsyslog (log management)
+SSH (OpenSSH server)
+⚙️ Lab Setup
+1. Install Splunk
+wget -O splunk.deb "https://download.splunk.com/products/splunk/releases/10.2.1/linux/splunk-10.2.1-c892b66d163d-linux-amd64.deb"
+sudo dpkg -i splunk.deb
+sudo apt --fix-broken install -y
+2. Start Splunk
+/opt/splunk/bin/splunk start --accept-license
+3. Enable Boot Persistence
+sudo /opt/splunk/bin/splunk enable boot-start -user ray
+4. Configure Logging (Kali Fix)
+sudo apt install rsyslog -y
+sudo systemctl enable rsyslog
+sudo systemctl start rsyslog
+5. Enable SSH
+sudo apt install openssh-server -y
+sudo systemctl start ssh
+sudo systemctl enable ssh
+📥 Log Ingestion
+Monitored file:
+/var/log/auth.log
+Added via Splunk:
+Settings → Add Data → Monitor → Files & Directories
+Sourcetype: linux_secure
+Index: main
+🧪 Attack Simulation
+
+Simulated brute-force attempts:
+
+ssh fakeuser@localhost
+
+Repeated multiple times to generate failed login events.
+
+🔍 Detection Queries
+
+🔹 Failed Login Detection
+index=main "Failed password"
+
+🔹 Extract IP + User
+index=main "Failed password"
+| rex "from (?<src>\S+)"
+| rex "Failed password for (?:invalid user )?(?<user>\S+)"
+| stats count by src, user
+| sort -count
+
+🔹 Brute Force Detection Rule
+index=main "Failed password"
+| rex "from (?<src>\S+)"
+| stats count by src
+| where count > 5
+
+🚨 MITRE ATT&CK Mapping
+Technique: T1110 – Brute Force
+Tactic: Credential Access
+
+Data Source: Authentication Logs
+📊 Dashboard
+
+Created a Splunk dashboard:
+“SSH Brute Force Monitoring”
+
+Panels:
+🔥 Top Attacking IPs
+👤 Most Targeted Usernames
+⏱️ Failed Login Attempts Over Time
+🚨 Brute Force Alerts
+📄 Incident Summary
+
+Title: SSH Brute Force Attack Detected
+Severity: Medium
+
+Description:
+Multiple failed SSH login attempts were detected from a single source IP (::1), targeting invalid user accounts.
+
+🔍 Findings
+Repeated authentication failures
+Multiple login attempts in short timeframe
+Behavior consistent with brute-force attack
+🛠️ Recommendations
+Disable password-based SSH authentication
+Use SSH key-based authentication
+Implement rate limiting (e.g., fail2ban)
+Monitor authentication logs continuously
+🧠 Key Takeaways
+SIEM deployment requires troubleshooting and tuning
+Log parsing and field extraction are critical skills
+Detection engineering is iterative and data-driven
+Hands-on labs simulate real SOC analyst workflows
+
+
+
+🔗 Project Link
+
+👉 https://github.com/meyray990-sketch/-siem-splunk-notes
